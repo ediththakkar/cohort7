@@ -21,7 +21,7 @@ namespace ContosoUniversity.Models
             set { myVar = value; }
         }
 
-
+        //navigation properties
         public ICollection<Enrollment> Enrollments { get; set; }
     }
 }

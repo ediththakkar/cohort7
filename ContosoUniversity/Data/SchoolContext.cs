@@ -9,10 +9,11 @@ namespace ContosoUniversity.Data
 {
     public class SchoolContext : DbContext
     {
-
+        //this is the constructor
         public SchoolContext(DbContextOptions<SchoolContext> options) : base(options)
         { }
 
+        //this is the dependency injection
         public DbSet<Course> Courses { get; set; }
 
         public DbSet<Enrollment> Enrollments { get; set; }

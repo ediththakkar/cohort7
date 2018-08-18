@@ -11,7 +11,6 @@ namespace ContosoUniversity.Models
         
         public int DepartmentID { get; set; }
         [StringLength(50, MinimumLength =3)]
-
         public String Name { get; set; }
 
         [DataType(DataType.Currency)]

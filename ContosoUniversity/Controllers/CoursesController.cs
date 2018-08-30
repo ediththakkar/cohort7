@@ -38,6 +38,7 @@ namespace ContosoUniversity.Controllers
 
             var course = await _context.Courses
                 .Include(c => c.Department)
+                .AsNoTracking()
                 .SingleOrDefaultAsync(m => m.CourseID == id);
             if (course == null)
             {
@@ -50,8 +51,14 @@ namespace ContosoUniversity.Controllers
         // GET: Courses/Create
         public IActionResult Create()
         {
-            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID");
+            PopulateDepartmentsDropDownList(null);
+
             return View();
+        }
+
+        private void PopulateDepartmentsDropDownList(int? DepartmentID)
+        {
+            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID",DepartmentID);
         }
 
         // POST: Courses/Create
@@ -67,7 +74,8 @@ namespace ContosoUniversity.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID", course.DepartmentID);
+
+            PopulateDepartmentsDropDownList(course.DepartmentID);
             return View(course);
         }
 
@@ -120,8 +128,26 @@ namespace ContosoUniversity.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DepartmentID"] = new SelectList(_context.Departments, "DepartmentID", "DepartmentID", course.DepartmentID);
+            PopulateDepartmentsDropDownList(id);
             return View(course);
+        }
+
+        public IActionResult UpdateCourseCredits()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateCourseCredits(int? multiplier)
+        {
+            if (multiplier != null)
+            {
+                ViewData["RowsAffected"] =
+                    await _context.Database.ExecuteSqlCommandAsync(
+                        "UPDATE Course SET Credits = Credits * {0}",
+                        parameters: multiplier);
+            }
+            return View();
         }
 
         // GET: Courses/Delete/5
@@ -134,6 +160,7 @@ namespace ContosoUniversity.Controllers
 
             var course = await _context.Courses
                 .Include(c => c.Department)
+                .AsNoTracking()
                 .SingleOrDefaultAsync(m => m.CourseID == id);
             if (course == null)
             {

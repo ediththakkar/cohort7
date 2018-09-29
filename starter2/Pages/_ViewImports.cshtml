@@ -1,0 +1,10 @@
+@using Microsoft.AspNetCore.Identity
+@using ContactManager.Models
+@using ContactManager.Pages.Account
+@using ContactManager.Pages.Account.Manage
+@using ContactManager.Authorization
+@using Microsoft.AspNetCore.Authorization
+@using ContactManager.Data
+@namespace ContactManager.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@inject IAuthorizationService AuthorizationServices
